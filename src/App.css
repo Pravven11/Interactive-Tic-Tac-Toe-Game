@@ -37,10 +37,10 @@ h1 {
     display: inline-block;
 }
 
-.dot{
+.mark2{
     background-image: url("./src/assets/images/vecteezy_red-circle-frame-border-transparent-background_55333564.png")
 }
 
-.cross{
+.mark1{
     background-image: url("./assets/images/vecteezy_3d-icon-cross-mark_25209052.png");
 }
