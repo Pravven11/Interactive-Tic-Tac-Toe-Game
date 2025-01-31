@@ -1,46 +1,101 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
+body {
+  font-family: 'Finger Paint' , cursive;
+}
+
 h1 {
-    font-family: 'Pacifico', cursive; /* Apply the handwritten font */
-    font-size: 4rem; /* Adjust the size of the font */
-    color: #2c3e50; /* Change the color as you like */
-    text-align: center; /* Center align the text */
-    letter-spacing: 2px; /* Add slight spacing between letters */
-    text-transform: capitalize; /* Capitalize the text */
-    
-    /* Apply a subtle wavy effect using text-shadow */
+    font-family: 'Pacifico', cursive;
+    font-size: 4rem;
+    color: #2c3e50;
+    text-align: center;
+    letter-spacing: 0.5rem;
+    text-transform: capitalize;
     text-shadow: 
       1px 1px 2px rgba(0,0,0,0.2),
       -1px -1px 2px rgba(0,0,0,0.1),
       0px 4px 5px rgba(0, 0, 0, 0.1);
-      
-    /* Slight tilt for added hand-written charm */
-    transform: rotate(-1deg); 
-  }
-  
-  h1:hover {
-    /* Optionally, add a slight hover effect for more interaction */
     transform: rotate(1deg);
-  }
-  
-.Board{
+    transition: transform 0.3s ease-in-out; 
+    animation: animateText 3s ease-in-out infinite; /* Apply animation */ 
+}
+
+h1:hover {
+    transform: rotate(1deg);
+}
+
+/* Board Styles */
+.Board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    top: 0;
+}
+
+/* Grid Layout for Board */
+.grid {
     display: grid;
-    place-items: center;
-    margin-top: -20px;
-
-}
-.Block{
-    width: 150px;
-    height: 150px;
-    border: 5px solid black;
-    background-size: cover;
-    display: inline-block;
+    grid-template-columns: repeat(3, 1fr);
 }
 
-.mark2{
-    background-image: url("./src/assets/images/vecteezy_red-circle-frame-border-transparent-background_55333564.png")
+/* Block Styles */
+.Block {
+  width: 120px;
+  height: 120px;
+  border: 3px solid rgb(0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  margin-left: -3.5px;
 }
 
-.mark1{
-    background-image: url("./assets/images/vecteezy_3d-icon-cross-mark_25209052.png");
+/* Remove right border for indexes 2, 5, 8 */
+.Block:nth-child(3n+3) {
+  border-right: none;
+}
+
+/* Remove bottom border for indexes 6, 7, 8 */
+.Block:nth-child(n+7) {
+  border-bottom: none;
+}
+
+/* Remove top border for indexes 0, 1, 2 */
+.Block:nth-child(-n+3) {
+  border-top: none;
+}
+
+/* Remove left border for indexes 0, 3, 6 */
+.Block:nth-child(3n+1) {
+  border-left: none;
+}
+
+/* Background images */
+.markX {
+    background-image: url("./assets/images/x.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.markO {
+    background-image: url("./assets/images/o.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .Block {
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
+    }
 }

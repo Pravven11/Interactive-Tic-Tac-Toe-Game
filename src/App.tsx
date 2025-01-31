@@ -1,78 +1,85 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+
 const App = () => {
   return (
     <div>
       <h1>Tic Tac Toe</h1>
-      <Board></Board>
+      <Board />
     </div>
   );
 };
 
 function Board() {
-  const [marks, setmarks] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
-  const [player, setPlayer] = useState(1);
+  const [marks, setMarks] = useState(Array(9).fill(null));
+  const [player, setPlayer] = useState("X");
+  const [winner, setWinner] = useState(null);
+  const [draw, setDraw] = useState(false); // State to track a draw
+
+  const winCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
 
   useEffect(() => {
-    const winCobminations = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
-
-    for (let c of winCobminations) {
-      if (marks[c[0]] === 1 && marks[c[1]] === 1 && marks[c[2]] === 1) {
-        alert("player 1 wins");
-      }
-      if (marks[c[0]] === 2 && marks[c[1]] === 2 && marks[c[2]] === 2) {
-        alert("player 2 wins");
-      }
-      
-    }
+    checkWinner();
   }, [marks]);
 
-  const changeMark = (i) => {
-    const m = [...marks];
-    if (m[i] === 0) {
-      m[i] = player;
-      setmarks(m);
-      setPlayer(player === 1 ? 2 : 1);
-    } else {
-      alert("Please click on empty block");
+  const checkWinner = () => {
+    for (let combination of winCombinations) {
+      const [a, b, c] = combination;
+      if (marks[a] && marks[a] === marks[b] && marks[a] === marks[c]) {
+        setWinner(marks[a]);
+        return;
+      }
+    }
+    // Check for draw: if all cells are filled and there's no winner
+    if (!marks.includes(null)) {
+      setDraw(true);
     }
   };
+
+  const changeMark = (i) => {
+    if (marks[i] || winner || draw) return;
+
+    const newMarks = [...marks];
+    newMarks[i] = player;
+    setMarks(newMarks);
+    setPlayer(player === "X" ? "O" : "X");
+  };
+
   return (
     <div className="Board">
-      <div>
-        <Block mark={marks[0]} position={0} changeMark={changeMark} />
-        <Block mark={marks[1]} position={1} changeMark={changeMark} />
-        <Block mark={marks[2]} position={2} changeMark={changeMark} />
+      <h2>
+        {winner
+          ? `🎉 Player ${winner} Wins!`
+          : draw
+          ? "It's a Draw!"
+          : `Player ${player}'s Turn`}
+      </h2>
+      <div className="grid">
+        {marks.map((mark, i) => (
+          <Block key={i} mark={mark} position={i} changeMark={changeMark} />
+        ))}
       </div>
-      <div>
-        <Block mark={marks[3]} position={3} changeMark={changeMark} />
-        <Block mark={marks[4]} position={4} changeMark={changeMark} />
-        <Block mark={marks[5]} position={5} changeMark={changeMark} />
-      </div>
-      <div>
-        <Block mark={marks[6]} position={6} changeMark={changeMark} />
-        <Block mark={marks[7]} position={7} changeMark={changeMark} />
-        <Block mark={marks[8]} position={8} changeMark={changeMark} />
-      </div>
+      {(winner || draw) && (
+        <button onClick={() => window.location.reload()}>Restart</button>
+      )}
     </div>
   );
 }
 
 function Block({ mark, changeMark, position }) {
   return (
-    <div
-      className={`Block mark${mark}`}
-      onClick={(e) => changeMark(position)}
-    ></div>
+    <div className="Block" onClick={() => changeMark(position)}>
+      {mark}
+    </div>
   );
 }
 
